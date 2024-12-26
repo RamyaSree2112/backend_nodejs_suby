@@ -6,8 +6,11 @@ const productRoutes=require('./routes/productRoutes');
 const bodyParser=require('body-parser');
 const firmRoutes=require('./routes/firmRoutes');
 const path=require('path')
+const cors=require('cors');
 
 const app=express()
+app.use(cors())
+
 const PORT=process.env.PORT || 4001;
 dotEnv.config();
 mongoose.connect(process.env.MONGO_URL)
