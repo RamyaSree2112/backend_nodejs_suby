@@ -1,21 +1,26 @@
 const Product = require("../models/Product");
-const multer=require("multer"); 
-const Firm=require('../models/Firm');
+const multer = require("multer");
+const Firm = require('../models/Firm')
+const path = require('path');
+
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, 'uploads/'); // Set the destination folder
+        cb(null, 'uploads/'); // Destination folder where the uploaded images will be stored
     },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname)); // Set the file name (e.g., 1618001234567.jpg)
+    filename: function(req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)); // Generating a unique filename
     }
 });
-const upload=multer({storage:storage});
-const addProduct=async(req,res)=>{
-    try{
-        const{productName,price,category,bestseller,description}=req.body;
-        const image=req.file?req.file.filename:undefined;
-        const firmId=req.params.firmId;
+
+const upload = multer({ storage: storage });
+
+const addProduct = async(req, res) => {
+    try {
+        const { productName, price, category, bestSeller, description } = req.body;
+        const image = req.file ? req.file.filename : undefined;
+
+        const firmId = req.params.firmId;
         const firm = await Firm.findById(firmId);
 
         if (!firm) {
@@ -26,15 +31,15 @@ const addProduct=async(req,res)=>{
             productName,
             price,
             category,
-            bestseller,
+            bestSeller,
             description,
             image,
             firm: firm._id
         })
 
         const savedProduct = await product.save();
-        firm.product.push(savedProduct)
-      
+        firm.products.push(savedProduct);
+
 
         await firm.save()
 
@@ -45,6 +50,7 @@ const addProduct=async(req,res)=>{
         res.status(500).json({ error: "Internal server error" })
     }
 }
+
 const getProductByFirm = async(req, res) => {
     try {
         const firmId = req.params.firmId;
@@ -63,6 +69,7 @@ const getProductByFirm = async(req, res) => {
         res.status(500).json({ error: "Internal server error" })
     }
 }
+
 const deleteProductById = async(req, res) => {
     try {
         const productId = req.params.productId;
@@ -79,6 +86,4 @@ const deleteProductById = async(req, res) => {
     }
 }
 
-module.exports = { addProduct: [upload.single('image'), addProduct],getProductByFirm,deleteProductById}
-
-
+module.exports = { addProduct: [upload.single('image'), addProduct], getProductByFirm, deleteProductById };
