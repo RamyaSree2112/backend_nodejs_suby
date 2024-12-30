@@ -9,9 +9,7 @@ const path=require('path')
 const cors=require('cors');
 
 const app=express()
-app.use(cors({
-    origin: 'http://localhost:5173'
-}));
+app.use(cors())
 
 const PORT=process.env.PORT || 4001;
 dotEnv.config();
