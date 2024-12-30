@@ -9,7 +9,16 @@ const path=require('path')
 const cors=require('cors');
 
 const app=express()
-app.use(cors())
+const corsOptions = {
+    origin: [
+      'https://suby-backend-dashboard-chi.vercel.app', // Production frontend
+      'http://localhost:5173',                        // Development frontend
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],         // Allowed HTTP methods
+    credentials: true,                                // Allow cookies or auth headers
+  };
+  
+  app.use(cors(corsOptions));
 
 const PORT=process.env.PORT || 4001;
 dotEnv.config();
