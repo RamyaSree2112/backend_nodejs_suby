@@ -10,7 +10,7 @@ const cors=require('cors');
 
 const app=express()
 app.use(cors({
-    origin: 'https://suby-backend-dashboard-chi.vercel.app' 
+    origin: 'http://localhost:5173'
 }));
 
 const PORT=process.env.PORT || 4001;
